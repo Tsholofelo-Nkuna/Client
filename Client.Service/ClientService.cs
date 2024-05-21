@@ -20,7 +20,7 @@ namespace Client.Service
             try
             {
                
-               var clientAddressExists = this._db.Addresses.FirstOrDefault(x => x.Id == address.Id && x.ClientUniqueId == address.ClientUniqueId);
+               var clientAddressExists = this._db.Addresses.AsNoTracking().FirstOrDefault(x => x.Id == address.Id && x.ClientUniqueId == address.ClientUniqueId);
                 if(clientAddressExists == null)
                 {
                     var storeProcResult = this._db.Database.ExecuteSqlRaw(
@@ -98,19 +98,33 @@ namespace Client.Service
 
         public ClientDetailsViewItem? GetClient(long clientId)
         {
-            return this._db.Set<ClientDetailsViewItem>().FirstOrDefault(x => x.ClientUniqueId == clientId);
+            try
+            {
+                return this._db.Set<ClientDetailsViewItem>().FirstOrDefault(x => x.ClientUniqueId == clientId);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public int DeleteClient(long clientId)
         {
-            var removedClientAddressLinks = this._db.Addresses.Where(x => x.ClientUniqueId == clientId);
-            this._db.Addresses.RemoveRange(removedClientAddressLinks.ToList());
-            var removedClient = this._db.Clients.FirstOrDefault(x => x.Id == clientId);
-            if (removedClient != null)
+            try
             {
-                this._db.Clients.Remove(removedClient);
+                var removedClientAddressLinks = this._db.Addresses.Where(x => x.ClientUniqueId == clientId);
+                this._db.Addresses.RemoveRange(removedClientAddressLinks.ToList());
+                var removedClient = this._db.Clients.FirstOrDefault(x => x.Id == clientId);
+                if (removedClient != null)
+                {
+                    this._db.Clients.Remove(removedClient);
+                }
+                return this._db.SaveChanges();
             }
-            return this._db.SaveChanges();
+            catch
+            {
+                return 0;
+            }
         }
 
     }

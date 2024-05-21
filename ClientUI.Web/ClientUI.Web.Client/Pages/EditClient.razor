@@ -1,0 +1,51 @@
+﻿@rendermode InteractiveServer
+@inherits EditClientBase
+@page "/Edit/{clientId}"
+
+<h3>
+    @if(long.TryParse(this.ClientId, out var cId))
+    {
+        if(cId > 0)
+        {
+            <span>Edit Client</span>
+        }
+        else
+        {
+            <span>Add Client</span>
+        }
+    }
+</h3>
+<EditForm Model="EditModel">
+    <label class="col-3">
+        First Name:
+        <InputText @bind-Value="EditModel.FirstName" class="form-control"></InputText>
+    </label>
+    <label class="col-3">
+        Last Name:
+        <InputText @bind-Value="EditModel.LastName" class="form-control"></InputText>
+    </label>
+    <label class="col-3">
+        Gender:
+        <InputSelect @bind-Value="this.SelectedGender" class="form-control">
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+        </InputSelect>
+    </label>
+    <label class="col-3"> 
+        Contact Number:
+        <InputText @bind-Value="EditModel.ContactNumber" class="form-control"></InputText>
+    </label>
+   <label class="col-3">
+       Address Description:
+        <InputText @bind-Value="EditModel.AddressDescription" class="form-control"></InputText>
+   </label>
+   <button class="btn btn-success" @onclick="()=>this.OnSubmitClick()">Submit</button>
+   &nbsp;
+    <button class="btn btn-primary" @onclick="()=>this.OnBackClick()">Back</button>
+    &nbsp;
+    @if (!string.IsNullOrEmpty(this.responseMessage))
+    {
+        <span class="text-primary">@responseMessage</span>
+    }
+</EditForm>
+

@@ -17,6 +17,13 @@ namespace Client.API
                 })
                 .AddDbContext<WebDbContext>();
             builder.Services.AddScoped<ClientService>();
+            builder.Services.AddCors(config =>
+            {
+                config.AddPolicy("Cors",p =>
+                {
+                    p.AllowAnyHeader().AllowAnyMethod().AllowAnyMethod();
+                });
+            });
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -30,6 +37,8 @@ namespace Client.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("Cors");
 
             app.UseHttpsRedirection();
 

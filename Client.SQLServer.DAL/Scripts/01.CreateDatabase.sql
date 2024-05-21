@@ -1,1 +1,1 @@
-create database ClientDb;
+create database ClientDatabase;

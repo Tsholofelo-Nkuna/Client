@@ -1,4 +1,4 @@
-use ClientDb;
+use ClientDatabase;
 
 create table Client(
 UniqueId bigint Identity(1,1) Primary Key, 

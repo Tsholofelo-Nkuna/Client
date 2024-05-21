@@ -39,6 +39,7 @@ namespace Client.API.Controllers
                 FirstName = value.FirstName,
                 LastName = value.LastName,
                 Id = value.ClientUniqueId,
+                Gender = value.Gender,
 
             };
            var affectedRowCount = this._clientService.AddClient(clientToAdd);
